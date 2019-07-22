@@ -29,7 +29,7 @@ module.exports = (opts = {}) => {
     }
   })
 
-  let processedEvents = [];
+  let processedEvents = []
 
   let lastTimestamp = currentTimeStamp() - (opts.interval / 1000)
   setInterval(() => {
@@ -42,10 +42,11 @@ module.exports = (opts = {}) => {
 
       lastTimestamp = currentTimeStamp()
       const eventsToProcess = evts.data.filter(evt => !processedEvents.includes(evt.id))
-      if(eventsToProcess.length)
+      if (eventsToProcess.length) {
         processedEvents.splice(0, processedEvents.length, [...eventsToProcess.map(evt => evt.id)])
-      
-        Promise.all(eventsToProcess.map(evt => {
+      }
+
+      Promise.all(eventsToProcess.map(evt => {
         return stripe.events.retrieve(evt.id)
           .then(data => {
             !opts.quiet && console.log(`Received Stripe Event: ${evt.id}`)
